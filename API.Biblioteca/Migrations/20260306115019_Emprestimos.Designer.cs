@@ -4,6 +4,7 @@ using API.Biblioteca.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Biblioteca.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260306115019_Emprestimos")]
+    partial class Emprestimos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,100 +24,6 @@ namespace API.Biblioteca.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("API.Biblioteca.Models.Cliente", b =>
-                {
-                    b.Property<Guid>("ClienteId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Celular")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateOnly>("DataNascimento")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ClienteId");
-
-                    b.ToTable("Cliente");
-                });
-
-            modelBuilder.Entity("API.Biblioteca.Models.Devolucao", b =>
-                {
-                    b.Property<Guid>("DevolucaoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("Atrasado")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("DataDevolucao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("EmprestimoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("DevolucaoId");
-
-                    b.HasIndex("EmprestimoId");
-
-                    b.ToTable("Devolucao");
-                });
-
-            modelBuilder.Entity("API.Biblioteca.Models.Emprestimo", b =>
-                {
-                    b.Property<Guid>("EmprestimoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ClienteId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DataDevolucao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DataEmprestimo")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Devolvido")
-                        .HasColumnType("bit");
-
-                    b.HasKey("EmprestimoId");
-
-                    b.HasIndex("ClienteId");
-
-                    b.ToTable("Emprestimo");
-                });
-
-            modelBuilder.Entity("API.Biblioteca.Models.EmprestimoLivro", b =>
-                {
-                    b.Property<Guid>("EmprestimoLivroId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EmprestimoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("LivroId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("EmprestimoLivroId");
-
-                    b.HasIndex("EmprestimoId");
-
-                    b.HasIndex("LivroId");
-
-                    b.ToTable("EmprestimoLivro");
-                });
 
             modelBuilder.Entity("API.Biblioteca.Models.Genero", b =>
                 {
@@ -398,47 +307,6 @@ namespace API.Biblioteca.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("API.Biblioteca.Models.Devolucao", b =>
-                {
-                    b.HasOne("API.Biblioteca.Models.Emprestimo", "Emprestimo")
-                        .WithMany()
-                        .HasForeignKey("EmprestimoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Emprestimo");
-                });
-
-            modelBuilder.Entity("API.Biblioteca.Models.Emprestimo", b =>
-                {
-                    b.HasOne("API.Biblioteca.Models.Cliente", "Cliente")
-                        .WithMany()
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cliente");
-                });
-
-            modelBuilder.Entity("API.Biblioteca.Models.EmprestimoLivro", b =>
-                {
-                    b.HasOne("API.Biblioteca.Models.Emprestimo", "Emprestimo")
-                        .WithMany()
-                        .HasForeignKey("EmprestimoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Biblioteca.Models.Livro", "Livro")
-                        .WithMany()
-                        .HasForeignKey("LivroId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Emprestimo");
-
-                    b.Navigation("Livro");
                 });
 
             modelBuilder.Entity("API.Biblioteca.Models.Genero", b =>
